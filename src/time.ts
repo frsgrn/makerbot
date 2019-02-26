@@ -15,7 +15,7 @@ export class HoursMinutes {
         return false
     }
     toString(): string {
-        return this.hours + ":" + this.minutes
+        return this.hours + ":" + (this.minutes < 10 ? "0" + this.minutes : this.minutes)
     }
 }
 
