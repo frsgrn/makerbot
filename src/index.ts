@@ -17,11 +17,21 @@ function open(until, member) {
     if (time) {
         if (!openTo) {
             openTo = time
-            broadcast(member.displayName + " håller nu öppet makerspace tills **" + openTo.toString() + "**.")
+            broadcast(member.displayName + " håller nu **öppet** makerspace tills **" + openTo.toString() + "**.")
         } else {
             openTo = time
-            broadcast(member.displayName + " har ändrat stängningstiden till **" + openTo.toString() + "**.")
+            broadcast(member.displayName + " har **ändrat** stängningstiden till **" + openTo.toString() + "**.")
         }
+    }
+}
+
+function close(member) {
+    if (!member.roles.find("name", process.env.KEY_ROLE)) {
+        return
+    }
+    if (openTo) {
+        openTo = null
+        broadcast(member.displayName + " har nu **stängt** Makerspace.")
     }
 }
 
@@ -34,6 +44,9 @@ client.on('message', msg => {
         if (args[0] == "!öppet") {
             open(args[1], msg.member)
         }
+        else if (args[0] == "!stängt") {
+            close(msg.member)
+        }
 });
 
 setInterval(() => {
@@ -43,7 +56,7 @@ setInterval(() => {
     let date: Date = new Date()
     if (openTo.hasPassed(new HoursMinutes(date.getHours(), date.getMinutes()))) {
         openTo = null
-        broadcast("Makerspace är nu stängt.")
+        broadcast("Makerspace är nu **stängt**.")
     }
 }, 10000)
 
